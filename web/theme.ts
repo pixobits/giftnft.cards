@@ -22,5 +22,10 @@ export default createTheme({
         },
       },
     },
+    MuiInputBase: {
+      defaultProps: {
+        size: "small",
+      },
+    },
   },
 });
