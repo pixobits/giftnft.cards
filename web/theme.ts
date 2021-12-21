@@ -6,10 +6,14 @@ export default createTheme({
     primary: indigo,
   },
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
-        disableRipple: true,
       },
       styleOverrides: {
         root: {
