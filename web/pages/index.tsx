@@ -1,4 +1,5 @@
 import { Avatar, Button, Stack, Typography } from "@mui/material";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,9 +17,11 @@ export default function Home() {
       <Typography variant="h4" fontWeight={200} sx={{ mt: 3 }}>
         Send your friends NFT Gift Cards
       </Typography>
-      <Button variant="contained" size="large" sx={{ mt: 2 }}>
-        Connect your Wallet
-      </Button>
+      <Link href="/mint-a-gift" passHref>
+        <Button component="a" variant="contained" size="large" sx={{ mt: 2 }}>
+          Connect your Wallet
+        </Button>
+      </Link>
     </Stack>
   );
 }
