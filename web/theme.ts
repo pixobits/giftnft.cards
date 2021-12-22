@@ -30,6 +30,7 @@ export default createTheme({
     MuiButtonGroup: {
       defaultProps: {
         disableElevation: true,
+        disableRipple: true,
       },
     },
   },
