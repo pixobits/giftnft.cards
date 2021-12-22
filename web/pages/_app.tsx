@@ -4,9 +4,11 @@ import { NextSeo } from "next-seo";
 import theme from "theme";
 import Head from "next/head";
 import { useInitializeMetamask } from "store/metamask";
+import { useInitializeAccount } from "store/account";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   useInitializeMetamask();
+  useInitializeAccount();
 
   return (
     <>
