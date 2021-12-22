@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
 import { useMetamask } from "store/metamask";
@@ -44,10 +44,16 @@ export default function ConnectWallet() {
   }
 
   return (
-    <Link href="/account/send-a-gift" passHref>
-      <Button component="a" variant="contained" size="large" sx={{ mt: 2 }}>
-        View Account
+    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+      <Button>
+        {accountId.substring(0, 8)}...
+        {accountId.substring(accountId.length - 6)}
       </Button>
-    </Link>
+      <Link href="/account/send-a-gift" passHref>
+        <Button component="a" variant="contained" size="small">
+          View Account
+        </Button>
+      </Link>
+    </Stack>
   );
 }
