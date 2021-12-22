@@ -9,12 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { MdArrowBack, MdArrowForward } from "react-icons/all";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import Navigation from "components/Navigation";
 
-export default function SendAGift() {
+export default function MintGiftCard() {
   return (
     <>
       <NextSeo title="Mint a Gift Card" />
+      <Navigation />
       <Typography variant="h5" textAlign="center" sx={{ mt: 4 }}>
         Mint a Gift Card
       </Typography>

@@ -49,7 +49,7 @@ export default function ConnectWallet() {
         {accountId.substring(0, 8)}...
         {accountId.substring(accountId.length - 6)}
       </Button>
-      <Link href="/account/send-a-gift" passHref>
+      <Link href="/account/mint-gift-card" passHref>
         <Button component="a" variant="contained" size="large">
           View Account
         </Button>

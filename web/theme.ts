@@ -27,5 +27,10 @@ export default createTheme({
         size: "small",
       },
     },
+    MuiButtonGroup: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
   },
 });
