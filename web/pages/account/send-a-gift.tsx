@@ -11,7 +11,7 @@ import {
 import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/all";
 
-export default function MintAGift() {
+export default function SendAGift() {
   return (
     <>
       <NextSeo title="Mint a Gift Card" />
