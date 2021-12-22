@@ -45,12 +45,12 @@ export default function ConnectWallet() {
 
   return (
     <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-      <Button>
+      <Button size="large">
         {accountId.substring(0, 8)}...
         {accountId.substring(accountId.length - 6)}
       </Button>
       <Link href="/account/send-a-gift" passHref>
-        <Button component="a" variant="contained" size="small">
+        <Button component="a" variant="contained" size="large">
           View Account
         </Button>
       </Link>
