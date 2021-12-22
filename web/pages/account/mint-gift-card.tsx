@@ -11,8 +11,19 @@ import {
 import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
+// @ts-ignore
+import { useScreenshot } from "use-react-screenshot";
+import { useCallback, useRef } from "react";
 
 export default function MintGiftCard() {
+  const giftCardRef = useRef();
+  const [, takeScreenshot] = useScreenshot();
+
+  const onMintGiftCard = useCallback(async () => {
+    const img = await takeScreenshot(giftCardRef.current);
+    console.log(img);
+  }, [takeScreenshot]);
+
   return (
     <>
       <NextSeo title="Mint a Gift Card" />
@@ -33,6 +44,7 @@ export default function MintGiftCard() {
               <MdArrowBack />
             </IconButton>
             <Box
+              ref={giftCardRef}
               sx={{
                 width: 400,
                 height: 550,
@@ -59,7 +71,9 @@ export default function MintGiftCard() {
               <TextField placeholder="Your name" fullWidth />
               <TextField placeholder="Amount" fullWidth />
               <TextField placeholder="Recipient" fullWidth />
-              <Button variant="contained">Mint your Gift</Button>
+              <Button variant="contained" onClick={onMintGiftCard}>
+                Mint your Gift
+              </Button>
             </Stack>
           </Stack>
         </Grid>
