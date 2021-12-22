@@ -11,6 +11,20 @@ export default function ConnectWallet() {
     await metamask.request({ method: "eth_requestAccounts" });
   }, [metamask]);
 
+  if (!metamask) {
+    return (
+      <Button
+        component="a"
+        href="https://metamask.io/"
+        target="_blank"
+        rel="noopener noreferrer"
+        variant="contained"
+      >
+        Install Metamask
+      </Button>
+    );
+  }
+
   if (!accountId) {
     return (
       <Button
