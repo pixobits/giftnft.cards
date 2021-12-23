@@ -1,6 +1,7 @@
 import create from "zustand";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
+import { ethers } from "ethers";
 
 type UseMetamaskStore = {
   ethereum: any;
@@ -15,6 +16,14 @@ const useMetamaskInner = create<UseMetamaskStore>(() => ({
  */
 export function useMetamask() {
   return useMetamaskInner(useCallback((state) => state.ethereum, []));
+}
+
+/**
+ * Gets the ethers client.
+ */
+export function useEthers() {
+  const metamask = useMetamask();
+  return useMemo(() => new ethers.providers.Web3Provider(metamask), [metamask]);
 }
 
 /**
