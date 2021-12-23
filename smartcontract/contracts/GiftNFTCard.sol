@@ -40,6 +40,9 @@ contract GiftNFTCard is
     /// The map of all the gift cards attached to the NFT.
     mapping(uint256 => GiftCard) private _giftMap;
 
+    /// List of gifts sent by an address.
+    mapping(address => uint256[]) private _sentGifts;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
@@ -76,6 +79,7 @@ contract GiftNFTCard is
             isUnwrapped: false,
             isInitialized: true
         });
+        _sentGifts[msg.sender].push(tokenId);
     }
 
     // The following functions are overrides required by Solidity.
