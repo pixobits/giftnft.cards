@@ -5,6 +5,16 @@ import theme from "theme";
 import Head from "next/head";
 import { useInitializeMetamask } from "store/metamask";
 import { useInitializeAccount } from "store/account";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Do not continuously fetch requests.
+      staleTime: Infinity,
+    },
+  },
+});
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   useInitializeMetamask();
@@ -21,9 +31,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <CssBaseline />
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </QueryClientProvider>
     </>
   );
 }
