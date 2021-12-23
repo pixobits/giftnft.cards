@@ -21,7 +21,12 @@ async function main() {
   const deployedAddress = process.env.DEPLOYED_ADDRESS;
   if (!deployedAddress) {
     // Deploying the smart contract for the first time.
-    const gnftCard = await upgrades.deployProxy(GiftNFTCard);
+    const contractBaseUri = process.env.CONTRACT_BASE_URI;
+    if (!contractBaseUri) {
+      throw new Error("`CONTRACT_BASE_URI` is not configured");
+    }
+
+    const gnftCard = await upgrades.deployProxy(GiftNFTCard, [contractBaseUri]);
     await gnftCard.deployed();
 
     console.log("GiftNFTCard deployed to:", gnftCard.address);

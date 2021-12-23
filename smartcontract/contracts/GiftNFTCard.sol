@@ -13,19 +13,21 @@ contract GiftNFTCard is Initializable, ERC721Upgradeable, ERC721EnumerableUpgrad
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     CountersUpgradeable.Counter private _tokenIdCounter;
+    string private _contractBaseURI;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
-    function initialize() initializer public {
+    function initialize(string memory uri) initializer public {
         __ERC721_init("Gift NFT Card", "GNFTCARD");
         __ERC721Enumerable_init();
         __ERC721Burnable_init();
         __Ownable_init();
+        _contractBaseURI = uri;
     }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "https://test.giftnft.cards";
+    function _baseURI() internal view override returns (string memory) {
+        return _contractBaseURI;
     }
 
     function safeMint(address to) public onlyOwner {
