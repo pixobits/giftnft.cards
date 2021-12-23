@@ -103,6 +103,23 @@ contract GiftNFTCard is
         return _giftMap[tokenId];
     }
 
+    /// Unwraps the amount stored in the gift card and withdraws it in the owner's wallet.
+    function unwrapGiftCard(uint256 tokenId) public {
+        require(
+            ERC721.ownerOf(tokenId) == msg.sender,
+            "GiftNFTCard: caller is not owner"
+        );
+        GiftCard card = _giftMap[tokenId];
+
+        address payable sender = payable(msg.sender);
+        // Send the gift amount to the caller.
+        (bool sent, ) = sender.call{value: gift.amount}("");
+        require(sent, "GiftNFTCard: failed to unwrap gift card");
+
+        // The gift is unwrapped now. Do not allow the same gift to redeem the amount again.
+        _giftMap[tokenId].isUnwrapped = true;
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(
