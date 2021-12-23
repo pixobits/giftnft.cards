@@ -1,6 +1,10 @@
 {
   "name": "hardhat-project",
   "private": true,
+  "scripts": {
+    "compile": "yarn hardhat compile",
+    "deploy-testnet": "yarn hardhat run scripts/deploy.ts --network metisStardust"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
     "@nomiclabs/hardhat-etherscan": "^2.1.8",
