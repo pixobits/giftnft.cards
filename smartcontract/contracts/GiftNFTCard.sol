@@ -7,12 +7,33 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
+/// GiftCard contains all the metadata stored within an NFT.
+struct GiftCard {
+    /// The ID of the NFT token.
+    uint256 tokenId;
+    /// The amount that is wrapped within this gift card.
+    uint256 amount;
+    /// The gift card image data URL.
+    string imageDataUrl;
+    /// Message on the gift card.
+    string message;
+    /// The one who sent this gift card.
+    string signedBy;
+    /// Whether the amount in the gift is unwrapped.
+    bool isUnwrapped;
+    /// Whether this gift card actually exists.
+    bool isInitialized;
+}
+
 /// @custom:security-contact pepsighan@sharadchand.com
 contract GiftNFTCard is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, OwnableUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     CountersUpgradeable.Counter private _tokenIdCounter;
     string private _contractBaseURI;
+
+    /// The map of all the gift cards attached to the NFT.
+    mapping(uint256 => GiftCard) private _giftMap;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
