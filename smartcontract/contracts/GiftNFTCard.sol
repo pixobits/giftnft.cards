@@ -110,6 +110,7 @@ contract GiftNFTCard is
             "GiftNFTCard: caller is not owner"
         );
         GiftCard card = _giftMap[tokenId];
+        require(gift.isUnwrapped == false, "GiftNFTCard: cannot unwrap already unwrapped gift card");
 
         address payable sender = payable(msg.sender);
         // Send the gift amount to the caller.
