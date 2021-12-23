@@ -82,13 +82,20 @@ contract GiftNFTCard is
         _sentGifts[msg.sender].push(tokenId);
     }
 
+    /// Gets the gift card by the token id.
+    function _getGiftCard(uint256 tokenId) private view returns (GiftCard memory) {
+        GiftCard card = _giftMap[tokenId];
+        require(card.isInitialized == true, "GiftNFTCard: gift card not found");
+        return card;
+    }
+
     /// Get gift card of the owner using index.
     function getGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
         uint256 tokenId = ERC721Enumerable.tokenOfOwnerByIndex(
             msg.sender,
             index
         );
-        return _giftMap[tokenId];
+        return _getGiftCard(tokenId);
     }
 
     /// Get the length of sent gifts of the sender.
@@ -100,7 +107,7 @@ contract GiftNFTCard is
     function getSentGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
         uint256 tokenId = _sentGifts[msg.sender][index];
         require(tokenId != 0, "GiftNFTCard: gift card not found");
-        return _giftMap[tokenId];
+        return _getGiftCard(tokenId);
     }
 
     /// Unwraps the amount stored in the gift card and withdraws it in the owner's wallet.
@@ -109,7 +116,7 @@ contract GiftNFTCard is
             ERC721.ownerOf(tokenId) == msg.sender,
             "GiftNFTCard: caller is not owner"
         );
-        GiftCard card = _giftMap[tokenId];
+        GiftCard card = _getGiftCard(tokenId);
         require(gift.isUnwrapped == false, "GiftNFTCard: cannot unwrap already unwrapped gift card");
 
         address payable sender = payable(msg.sender);
