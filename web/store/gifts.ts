@@ -30,3 +30,25 @@ export function useMyGifts() {
     );
   });
 }
+
+/**
+ * Fetch all the gifts sent by the selected account.
+ */
+export function useSentGifts() {
+  const eth = useEthers();
+
+  return useQuery("use-sent-gifts", async () => {
+    const contract = new ethers.Contract(
+      config.CONTRACT_ADDRESS,
+      config.CONTRACT_ABI,
+      eth
+    );
+
+    const giftsCount = await contract.lengthOfSentGiftCards();
+    return await Promise.all(
+      Array(giftsCount)
+        .fill(0)
+        .map(async (_, index) => contract.getSentGiftCardByIndex(index))
+    );
+  });
+}
