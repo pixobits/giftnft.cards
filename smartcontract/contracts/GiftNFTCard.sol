@@ -82,12 +82,21 @@ contract GiftNFTCard is
         _sentGifts[msg.sender].push(tokenId);
     }
 
+    /// Get gift card of the owner using index.
+    function getGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
+        uint256 tokenId = ERC721Enumerable.tokenOfOwnerByIndex(
+            msg.sender,
+            index
+        );
+        return _giftMap[tokenId];
+    }
+
     /// Get the length of sent gifts of the sender.
     function lengthOfSentGiftCards() public view returns (uint256) {
         return _sentGifts[msg.sender].length;
     }
 
-    /// Get gift card sent by the sender.
+    /// Get gift card sent by the sender using index.
     function getSentGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
         uint256 tokenId = _sentGifts[msg.sender][index];
         require(tokenId != 0, "GiftNFTCard: gift card not found");
