@@ -82,6 +82,18 @@ contract GiftNFTCard is
         _sentGifts[msg.sender].push(tokenId);
     }
 
+    /// Get the length of sent gifts of the sender.
+    function lengthOfSentGiftCards() public view returns (uint256) {
+        return _sentGifts[msg.sender].length;
+    }
+
+    /// Get gift card sent by the sender.
+    function getSentGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
+        uint256 tokenId = _sentGifts[msg.sender][index];
+        require(tokenId != 0, "GiftNFTCard: gift card not found");
+        return _giftMap[tokenId];
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(
