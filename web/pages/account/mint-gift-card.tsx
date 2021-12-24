@@ -16,24 +16,47 @@ import { useScreenshot } from "use-react-screenshot";
 import { useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  message: z.string().min(1, "Required"),
+  name: z.string().min(1, "Required"),
+  amount: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((v) => v > 0, "A gift card needs to have some coins"),
+  recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address"),
+});
+
+type SchemaType = z.infer<typeof schema>;
 
 export default function MintGiftCard() {
   const giftCardRef = useRef();
   const [, takeScreenshot] = useScreenshot();
 
-  const { register } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       message: "",
       name: "",
-      amount: "",
+      amount: 1,
       recipient: "",
     },
+    resolver: zodResolver(schema),
   });
 
-  const onMintGiftCard = useCallback(async () => {
-    const img = await takeScreenshot(giftCardRef.current);
-    console.log(img);
-  }, [takeScreenshot]);
+  const onMintGiftCard = useCallback(
+    async (state: SchemaType) => {
+      console.log(state);
+      // const img = await takeScreenshot(giftCardRef.current);
+      // console.log(img);
+    },
+    [takeScreenshot]
+  );
 
   return (
     <>
@@ -72,30 +95,44 @@ export default function MintGiftCard() {
 
         <Grid item md={6}>
           <Stack alignItems="flex-start">
-            <Stack spacing={2} sx={{ width: 400 }}>
+            <Stack
+              component="form"
+              spacing={2}
+              sx={{ width: 400 }}
+              onSubmit={handleSubmit(onMintGiftCard)}
+            >
               <TextField
                 {...materialRegister(register, "message")}
                 placeholder="Best wishes"
                 multiline
                 minRows={2}
                 fullWidth
+                helperText={errors.message?.message}
+                error={!!errors.message}
               />
               <TextField
                 {...materialRegister(register, "name")}
                 placeholder="Your name"
                 fullWidth
+                helperText={errors.name?.message}
+                error={!!errors.name}
               />
               <TextField
+                type="number"
                 {...materialRegister(register, "amount")}
                 placeholder="Amount"
                 fullWidth
+                helperText={errors.amount?.message}
+                error={!!errors.amount}
               />
               <TextField
                 {...materialRegister(register, "recipient")}
                 placeholder="Recipient"
                 fullWidth
+                helperText={errors.recipient?.message}
+                error={!!errors.recipient}
               />
-              <Button variant="contained" onClick={onMintGiftCard}>
+              <Button variant="contained" type="submit">
                 Mint your Gift
               </Button>
             </Stack>
