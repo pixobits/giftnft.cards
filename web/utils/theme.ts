@@ -22,9 +22,12 @@ export default createTheme({
         },
       },
     },
-    MuiInputBase: {
+    MuiTextField: {
       defaultProps: {
         size: "small",
+        InputLabelProps: {
+          shrink: true,
+        },
       },
     },
     MuiButtonGroup: {

@@ -102,8 +102,23 @@ export default function MintGiftCard() {
               onSubmit={handleSubmit(onMintGiftCard)}
             >
               <TextField
+                {...materialRegister(register, "recipient")}
+                label="Recipient"
+                fullWidth
+                helperText={errors.recipient?.message}
+                error={!!errors.recipient}
+              />
+              <TextField
+                type="number"
+                {...materialRegister(register, "amount")}
+                label="Amount"
+                fullWidth
+                helperText={errors.amount?.message}
+                error={!!errors.amount}
+              />
+              <TextField
                 {...materialRegister(register, "message")}
-                placeholder="Best wishes"
+                label="Message"
                 multiline
                 minRows={2}
                 fullWidth
@@ -112,25 +127,10 @@ export default function MintGiftCard() {
               />
               <TextField
                 {...materialRegister(register, "name")}
-                placeholder="Your name"
+                label="Your name"
                 fullWidth
                 helperText={errors.name?.message}
                 error={!!errors.name}
-              />
-              <TextField
-                type="number"
-                {...materialRegister(register, "amount")}
-                placeholder="Amount"
-                fullWidth
-                helperText={errors.amount?.message}
-                error={!!errors.amount}
-              />
-              <TextField
-                {...materialRegister(register, "recipient")}
-                placeholder="Recipient"
-                fullWidth
-                helperText={errors.recipient?.message}
-                error={!!errors.recipient}
               />
               <Button variant="contained" type="submit">
                 Mint your Gift
