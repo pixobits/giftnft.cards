@@ -14,10 +14,21 @@ import Navigation from "components/Navigation";
 // @ts-ignore
 import { useScreenshot } from "use-react-screenshot";
 import { useCallback, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { materialRegister } from "utils/materialForm";
 
 export default function MintGiftCard() {
   const giftCardRef = useRef();
   const [, takeScreenshot] = useScreenshot();
+
+  const { register } = useForm({
+    defaultValues: {
+      message: "",
+      name: "",
+      amount: "",
+      recipient: "",
+    },
+  });
 
   const onMintGiftCard = useCallback(async () => {
     const img = await takeScreenshot(giftCardRef.current);
@@ -63,14 +74,27 @@ export default function MintGiftCard() {
           <Stack alignItems="flex-start">
             <Stack spacing={2} sx={{ width: 400 }}>
               <TextField
+                {...materialRegister(register, "message")}
                 placeholder="Best wishes"
                 multiline
                 minRows={2}
                 fullWidth
               />
-              <TextField placeholder="Your name" fullWidth />
-              <TextField placeholder="Amount" fullWidth />
-              <TextField placeholder="Recipient" fullWidth />
+              <TextField
+                {...materialRegister(register, "name")}
+                placeholder="Your name"
+                fullWidth
+              />
+              <TextField
+                {...materialRegister(register, "amount")}
+                placeholder="Amount"
+                fullWidth
+              />
+              <TextField
+                {...materialRegister(register, "recipient")}
+                placeholder="Recipient"
+                fullWidth
+              />
               <Button variant="contained" onClick={onMintGiftCard}>
                 Mint your Gift
               </Button>
