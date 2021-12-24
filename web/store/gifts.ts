@@ -1,7 +1,7 @@
 import { useEthers } from "store/metamask";
 import { useQuery, useQueryClient } from "react-query";
 import { ethers } from "ethers";
-import config from "config";
+import config from "utils/config";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
 

@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { NextSeo } from "next-seo";
-import theme from "theme";
+import theme from "utils/theme";
 import Head from "next/head";
 import { useInitializeMetamask } from "store/metamask";
 import { useInitializeAccount } from "store/account";
