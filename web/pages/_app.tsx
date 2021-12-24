@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useInitializeMetamask } from "store/metamask";
 import { useInitializeAccount } from "store/account";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { SnackbarProvider } from "notistack";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +34,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <SnackbarProvider>
+            <Component {...pageProps} />
+          </SnackbarProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </>

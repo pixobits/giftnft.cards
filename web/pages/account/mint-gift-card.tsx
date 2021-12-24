@@ -19,6 +19,7 @@ import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMintGiftCard } from "store/gifts";
+import { useSnackbar } from "notistack";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -51,6 +52,8 @@ export default function MintGiftCard() {
     resolver: zodResolver(schema),
   });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const mintGiftCard = useMintGiftCard();
   const onMintGiftCard = useCallback(
     async (state: SchemaType) => {
@@ -63,8 +66,11 @@ export default function MintGiftCard() {
         imageDataUrl: img,
       });
       reset();
+      enqueueSnackbar("Minting a new gift card...", {
+        variant: "success",
+      });
     },
-    [takeScreenshot]
+    [enqueueSnackbar, mintGiftCard, reset, takeScreenshot]
   );
 
   return (
