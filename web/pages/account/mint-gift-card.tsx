@@ -18,14 +18,15 @@ import { useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMintGiftCard } from "store/gifts";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
   name: z.string().min(1, "Required"),
   amount: z
     .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((v) => v > 0, "A gift card needs to have some coins"),
+    .regex(/^[0-9]+$/, "Not a valid amount")
+    .refine((v) => parseInt(v, 10) > 0, "A gift card needs to have some coins"),
   recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address"),
 });
 
@@ -39,6 +40,7 @@ export default function MintGiftCard() {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm({
     defaultValues: {
       message: "",
@@ -49,11 +51,18 @@ export default function MintGiftCard() {
     resolver: zodResolver(schema),
   });
 
+  const mintGiftCard = useMintGiftCard();
   const onMintGiftCard = useCallback(
     async (state: SchemaType) => {
-      console.log(state);
-      // const img = await takeScreenshot(giftCardRef.current);
-      // console.log(img);
+      const img = await takeScreenshot(giftCardRef.current);
+      await mintGiftCard({
+        signedBy: state.name,
+        message: state.message,
+        amount: state.amount,
+        recipient: state.recipient,
+        imageDataUrl: img,
+      });
+      reset();
     },
     [takeScreenshot]
   );
