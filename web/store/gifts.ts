@@ -1,10 +1,7 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
-import {
-  getEthersMutationContract,
-  getEthersQueryContract,
-} from "utils/metamask";
+import { getContract } from "utils/metamask";
 
 /**
  * Fetch all the gift cards owned by the current selected account.
@@ -13,7 +10,7 @@ export function useMyGifts() {
   return useQuery(
     "use-my-gifts",
     useCallback(async () => {
-      const contract = await getEthersQueryContract();
+      const contract = await getContract();
       if (!contract) {
         return;
       }
@@ -40,14 +37,16 @@ export function useSentGifts() {
   return useQuery(
     "use-sent-gifts",
     useCallback(async () => {
-      const contract = await getEthersQueryContract();
+      const contract = await getContract();
       if (!contract) {
         return;
       }
 
       const giftsCount = await contract.lengthOfSentGiftCards();
+      console.log(giftsCount, Number(giftsCount._hex));
       return await Promise.all(
-        Array(giftsCount)
+        // Since the contract returns a BigNumber.
+        Array(Number(giftsCount._hex))
           .fill(0)
           .map(async (_, index) => contract.getSentGiftCardByIndex(index))
       );
@@ -71,7 +70,7 @@ export function useMintGiftCard() {
 
   return useCallback(
     async (arg: NewGiftCard) => {
-      const contract = await getEthersMutationContract();
+      const contract = await getContract();
       if (!contract) {
         return;
       }

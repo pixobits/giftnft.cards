@@ -17,26 +17,14 @@ export async function getEthers(): Promise<ethers.providers.Web3Provider | null>
   if (!metamask) {
     return null;
   }
-
+  console.log(metamask);
   return new ethers.providers.Web3Provider(metamask);
 }
 
 /**
- * Gets the query contract client.
+ * Gets the contract client.
  */
-export async function getEthersQueryContract(): Promise<ethers.Contract | null> {
-  const eth = await getEthers();
-  if (!eth) {
-    return null;
-  }
-
-  return new ethers.Contract(config.CONTRACT_ADDRESS, config.CONTRACT_ABI, eth);
-}
-
-/**
- * Gets the mutation contract client.
- */
-export async function getEthersMutationContract(): Promise<ethers.Contract | null> {
+export async function getContract(): Promise<ethers.Contract | null> {
   const eth = await getEthers();
   if (!eth) {
     return null;

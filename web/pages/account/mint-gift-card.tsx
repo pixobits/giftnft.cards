@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMintGiftCard } from "store/gifts";
 import { useSnackbar } from "notistack";
 import html2canvas from "html2canvas";
+import SentGifts from "components/SentGifts";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -157,6 +158,8 @@ export default function MintGiftCard() {
           </Stack>
         </Grid>
       </Grid>
+
+      <SentGifts />
     </>
   );
 }
