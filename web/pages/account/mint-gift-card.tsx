@@ -46,7 +46,7 @@ export default function MintGiftCard() {
     defaultValues: {
       message: "",
       name: "",
-      amount: 1,
+      amount: "1",
       recipient: "",
     },
     resolver: zodResolver(schema),
