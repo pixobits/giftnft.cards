@@ -43,10 +43,8 @@ export function useSentGifts() {
       }
 
       const giftsCount = await contract.lengthOfSentGiftCards();
-      console.log(giftsCount, Number(giftsCount._hex));
       return await Promise.all(
-        // Since the contract returns a BigNumber.
-        Array(Number(giftsCount._hex))
+        Array(giftsCount.toNumber())
           .fill(0)
           .map(async (_, index) => contract.getSentGiftCardByIndex(index))
       );

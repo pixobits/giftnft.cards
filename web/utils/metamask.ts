@@ -17,7 +17,6 @@ export async function getEthers(): Promise<ethers.providers.Web3Provider | null>
   if (!metamask) {
     return null;
   }
-  console.log(metamask);
   return new ethers.providers.Web3Provider(metamask);
 }
 
