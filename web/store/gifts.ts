@@ -4,6 +4,10 @@ import { ethers } from "ethers";
 import config from "utils/config";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
+import {
+  getEthersMutationContract,
+  getEthersQueryContract,
+} from "utils/metamask";
 
 /**
  * Fetch all the gift cards owned by the current selected account.
@@ -36,22 +40,22 @@ export function useMyGifts() {
  * Fetch all the gifts sent by the selected account.
  */
 export function useSentGifts() {
-  const eth = useEthers();
+  return useQuery(
+    "use-sent-gifts",
+    useCallback(async () => {
+      const contract = await getEthersQueryContract();
+      if (!contract) {
+        return;
+      }
 
-  return useQuery("use-sent-gifts", async () => {
-    const contract = new ethers.Contract(
-      config.CONTRACT_ADDRESS,
-      config.CONTRACT_ABI,
-      eth!
-    );
-
-    const giftsCount = await contract.lengthOfSentGiftCards();
-    return await Promise.all(
-      Array(giftsCount)
-        .fill(0)
-        .map(async (_, index) => contract.getSentGiftCardByIndex(index))
-    );
-  });
+      const giftsCount = await contract.lengthOfSentGiftCards();
+      return await Promise.all(
+        Array(giftsCount)
+          .fill(0)
+          .map(async (_, index) => contract.getSentGiftCardByIndex(index))
+      );
+    }, [])
+  );
 }
 
 type NewGiftCard = {
@@ -66,18 +70,14 @@ type NewGiftCard = {
  * Mint a new gift card.
  */
 export function useMintGiftCard() {
-  const eth = useEthers();
   const client = useQueryClient();
 
   return useCallback(
     async (arg: NewGiftCard) => {
-      const signer = eth!.getSigner();
-      const contract = new ethers.Contract(
-        config.CONTRACT_ADDRESS,
-        config.CONTRACT_ABI,
-        signer
-      );
-
+      const contract = await getEthersMutationContract();
+      if (!contract) {
+        return;
+      }
       await contract.safeMint(
         arg.recipient,
         arg.imageDataUrl,
@@ -93,6 +93,6 @@ export function useMintGiftCard() {
         client.invalidateQueries("use-sent-gifts"),
       ]);
     },
-    [client, eth]
+    [client]
   );
 }
