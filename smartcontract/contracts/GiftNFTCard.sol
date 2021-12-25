@@ -106,8 +106,9 @@ contract GiftNFTCard is
 
     /// Get gift card sent by the sender using index.
     function getSentGiftCardByIndex(uint256 index) public view returns (GiftCard memory) {
-        uint256 tokenId = _sentGifts[msg.sender][index];
-        require(tokenId != 0, "GiftNFTCard: gift card not found");
+        uint256[] memory tokenIds = _sentGifts[msg.sender];
+        require(tokenIds.length > index, "GiftNFTCard: gift card not found");
+        uint256 tokenId = tokenIds[index];
         return _getGiftCard(tokenId);
     }
 
