@@ -18,14 +18,14 @@ async function main() {
 
   // We get the smartcontract to deploy.
   const GiftNFTCard = await ethers.getContractFactory("GiftNFTCard");
+  // Deploying the smart contract for the first time.
+  const contractBaseUri = process.env.CONTRACT_BASE_URI;
+  if (!contractBaseUri) {
+    throw new Error("`CONTRACT_BASE_URI` is not configured");
+  }
+
   const deployedAddress = process.env.DEPLOYED_ADDRESS;
   if (!deployedAddress) {
-    // Deploying the smart contract for the first time.
-    const contractBaseUri = process.env.CONTRACT_BASE_URI;
-    if (!contractBaseUri) {
-      throw new Error("`CONTRACT_BASE_URI` is not configured");
-    }
-
     const gnftCard = await upgrades.deployProxy(GiftNFTCard, [contractBaseUri]);
     await gnftCard.deployed();
 
