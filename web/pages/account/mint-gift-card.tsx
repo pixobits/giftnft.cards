@@ -122,9 +122,12 @@ export default function MintGiftCard() {
             >
               <TextField
                 {...materialRegister(register, "recipient")}
-                label="Recipient"
+                label="Recipient Wallet"
                 fullWidth
-                helperText={errors.recipient?.message}
+                helperText={
+                  errors.recipient?.message ??
+                  "This is the wallet of the person who you want to send this gift card to."
+                }
                 error={!!errors.recipient}
               />
               <TextField
