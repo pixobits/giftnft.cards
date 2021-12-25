@@ -17,24 +17,41 @@ type GiftCard = {
  * Fetch all the gift cards owned by the current selected account.
  */
 export function useMyGifts() {
-  return useQuery(
+  return useQuery<GiftCard[]>(
     "use-my-gifts",
-    useCallback(async () => {
+    useCallback<() => Promise<GiftCard[]>>(async () => {
       const contract = await getContract();
       if (!contract) {
-        return;
+        return [];
       }
 
       const accountId = useAccount.getState().accountId;
       if (!accountId) {
-        return;
+        return [];
       }
 
       const giftsCount = await contract.balanceOf(accountId);
       return await Promise.all(
-        Array(giftsCount)
+        Array(giftsCount.toNumber())
           .fill(0)
-          .map(async (_, index) => contract.getGiftCardByIndex(index))
+          .map(async (_, index) => {
+            const [
+              tokenId,
+              amount,
+              imageDataUrl,
+              message,
+              signedBy,
+              isUnwrapped,
+            ] = await contract.getGiftCardByIndex(index);
+            return {
+              tokenId,
+              amount,
+              imageDataUrl,
+              message,
+              signedBy,
+              isUnwrapped,
+            };
+          })
       );
     }, [])
   );
