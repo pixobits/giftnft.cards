@@ -2,6 +2,16 @@ import { useQuery, useQueryClient } from "react-query";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
 import { getContract } from "utils/metamask";
+import { ethers } from "ethers";
+
+type GiftCard = {
+  tokenId: ethers.BigNumber;
+  amount: ethers.BigNumber;
+  imageDataUrl: string;
+  message: string;
+  signedBy: string;
+  isUnwrapped: boolean;
+};
 
 /**
  * Fetch all the gift cards owned by the current selected account.
@@ -34,19 +44,36 @@ export function useMyGifts() {
  * Fetch all the gifts sent by the selected account.
  */
 export function useSentGifts() {
-  return useQuery(
+  return useQuery<GiftCard[]>(
     "use-sent-gifts",
-    useCallback(async () => {
+    useCallback<() => Promise<GiftCard[]>>(async () => {
       const contract = await getContract();
       if (!contract) {
-        return;
+        return [];
       }
 
       const giftsCount = await contract.lengthOfSentGiftCards();
       return await Promise.all(
         Array(giftsCount.toNumber())
           .fill(0)
-          .map(async (_, index) => contract.getSentGiftCardByIndex(index))
+          .map(async (_, index) => {
+            const [
+              tokenId,
+              amount,
+              imageDataUrl,
+              message,
+              signedBy,
+              isUnwrapped,
+            ] = await contract.getSentGiftCardByIndex(index);
+            return {
+              tokenId,
+              amount,
+              imageDataUrl,
+              message,
+              signedBy,
+              isUnwrapped,
+            };
+          })
       );
     }, [])
   );
