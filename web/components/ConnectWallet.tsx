@@ -1,13 +1,14 @@
 import { Box, Button, Stack } from "@mui/material";
 import { useAccount } from "store/account";
 import { useCallback } from "react";
-import { useMetamask } from "store/metamask";
 import MetamaskIcon from "components/MetamaskIcon";
 import Link from "next/link";
+import { useAsync } from "react-use";
+import { getMetamask } from "utils/metamask";
 
 export default function ConnectWallet() {
   const accountId = useAccount(useCallback((state) => state.accountId, []));
-  const metamask = useMetamask();
+  const { value: metamask } = useAsync(useCallback(() => getMetamask(), []));
 
   const onRequest = useCallback(async () => {
     await metamask.request({ method: "eth_requestAccounts" });

@@ -3,7 +3,6 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { NextSeo } from "next-seo";
 import theme from "utils/theme";
 import Head from "next/head";
-import { useInitializeMetamask } from "store/metamask";
 import { useInitializeAccount } from "store/account";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider } from "notistack";
@@ -18,7 +17,6 @@ const queryClient = new QueryClient({
 });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  useInitializeMetamask();
   useInitializeAccount();
 
   return (

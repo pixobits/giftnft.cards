@@ -1,6 +1,7 @@
 import create from "zustand";
-import { useMetamask } from "store/metamask";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { useAsync } from "react-use";
+import { getMetamask } from "utils/metamask";
 
 type UseAccountStore = {
   accountId: string | null;
@@ -20,7 +21,7 @@ export const useAccount = create<UseAccountStore>(() => ({
  */
 export function useInitializeAccount() {
   // Listen to accounts changes on the metamask and update them.
-  const metamask = useMetamask();
+  const { value: metamask } = useAsync(useCallback(() => getMetamask(), []));
 
   useEffect(() => {
     if (!metamask) {
