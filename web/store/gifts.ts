@@ -15,7 +15,7 @@ export function useMyGifts() {
     const contract = new ethers.Contract(
       config.CONTRACT_ADDRESS,
       config.CONTRACT_ABI,
-      eth
+      eth!
     );
 
     const accountId = useAccount.getState().accountId;
@@ -42,7 +42,7 @@ export function useSentGifts() {
     const contract = new ethers.Contract(
       config.CONTRACT_ADDRESS,
       config.CONTRACT_ABI,
-      eth
+      eth!
     );
 
     const giftsCount = await contract.lengthOfSentGiftCards();
@@ -71,7 +71,7 @@ export function useMintGiftCard() {
 
   return useCallback(
     async (arg: NewGiftCard) => {
-      const signer = eth.getSigner();
+      const signer = eth!.getSigner();
       const contract = new ethers.Contract(
         config.CONTRACT_ADDRESS,
         config.CONTRACT_ABI,

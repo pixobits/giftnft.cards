@@ -23,7 +23,10 @@ export function useMetamask() {
  */
 export function useEthers() {
   const metamask = useMetamask();
-  return useMemo(() => new ethers.providers.Web3Provider(metamask), [metamask]);
+  return useMemo(
+    () => (metamask ? new ethers.providers.Web3Provider(metamask) : null),
+    [metamask]
+  );
 }
 
 /**
