@@ -35,7 +35,9 @@ async function main() {
     );
   } else {
     // Upgrading the smart contract.
-    await upgrades.upgradeProxy(deployedAddress, GiftNFTCard);
+    const gnftCard = await upgrades.upgradeProxy(deployedAddress, GiftNFTCard);
+    await gnftCard.deployed();
+
     console.log("GiftNFTCard upgraded to:", deployedAddress);
   }
 }
