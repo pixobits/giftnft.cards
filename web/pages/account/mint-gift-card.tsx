@@ -11,8 +11,6 @@ import {
 import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
-// @ts-ignore
-import { useScreenshot } from "use-react-screenshot";
 import { useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
@@ -20,6 +18,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMintGiftCard } from "store/gifts";
 import { useSnackbar } from "notistack";
+import html2canvas from "html2canvas";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -35,7 +34,6 @@ type SchemaType = z.infer<typeof schema>;
 
 export default function MintGiftCard() {
   const giftCardRef = useRef();
-  const [, takeScreenshot] = useScreenshot();
 
   const {
     register,
@@ -57,20 +55,25 @@ export default function MintGiftCard() {
   const mintGiftCard = useMintGiftCard();
   const onMintGiftCard = useCallback(
     async (state: SchemaType) => {
-      const img = await takeScreenshot(giftCardRef.current);
+      const canvas = await html2canvas(giftCardRef.current!, {
+        width: 400,
+        height: 550,
+      });
+      const imageDataUrl = canvas.toDataURL("image/webp");
+
       await mintGiftCard({
         signedBy: state.name,
         message: state.message,
         amount: state.amount,
         recipient: state.recipient,
-        imageDataUrl: img,
+        imageDataUrl,
       });
       reset();
       enqueueSnackbar("Minting a new gift card...", {
         variant: "success",
       });
     },
-    [enqueueSnackbar, mintGiftCard, reset, takeScreenshot]
+    [enqueueSnackbar, mintGiftCard, reset]
   );
 
   return (
