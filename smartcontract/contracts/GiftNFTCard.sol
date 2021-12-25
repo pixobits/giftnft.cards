@@ -63,7 +63,9 @@ contract GiftNFTCard is
         string memory imageDataUrl,
         string memory message,
         string memory signedBy
-    ) public payable onlyOwner {
+    ) public payable {
+        require(msg.value > 0, "GiftNFTCard: gift card needs to have some amount");
+
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
