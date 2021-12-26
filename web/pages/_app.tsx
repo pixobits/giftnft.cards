@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useInitializeAccount } from "store/account";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SnackbarProvider } from "notistack";
+import InvalidChainNotifier from "components/InvalidChainNotifier";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <SnackbarProvider>
             <Component {...pageProps} />
           </SnackbarProvider>
+          <InvalidChainNotifier />
         </ThemeProvider>
       </QueryClientProvider>
     </>
