@@ -4,15 +4,16 @@ import {
   colors,
   Grid,
   IconButton,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdClose } from "react-icons/md";
 import Navigation from "components/Navigation";
 import { useCallback, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +21,7 @@ import { useMintGiftCard } from "store/gifts";
 import { useSnackbar } from "notistack";
 import html2canvas from "html2canvas";
 import SentGifts from "components/SentGifts";
+import { useAccount } from "store/account";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -38,7 +40,9 @@ export default function MintGiftCard() {
 
   const {
     register,
+    control,
     formState: { errors },
+    setValue,
     handleSubmit,
     reset,
   } = useForm({
@@ -50,6 +54,17 @@ export default function MintGiftCard() {
     },
     resolver: zodResolver(schema),
   });
+
+  const recipient = useWatch({ control, name: "recipient" });
+
+  const onUseMyWallet = useCallback(() => {
+    const accountId = useAccount.getState().accountId!;
+    setValue("recipient", accountId);
+  }, [setValue]);
+
+  const onClearRecipient = useCallback(() => {
+    setValue("recipient", "");
+  }, [setValue]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -129,6 +144,21 @@ export default function MintGiftCard() {
                   "This is the wallet of the person who you want to send this gift card to."
                 }
                 error={!!errors.recipient}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {recipient ? (
+                        <IconButton size="small" onClick={onClearRecipient}>
+                          <MdClose />
+                        </IconButton>
+                      ) : (
+                        <Button size="small" onClick={onUseMyWallet}>
+                          Use My Wallet
+                        </Button>
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 type="number"
