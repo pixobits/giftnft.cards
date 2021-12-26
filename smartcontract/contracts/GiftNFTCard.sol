@@ -34,6 +34,8 @@ contract GiftNFTCard is
         address mintedBy;
         /// Whether the amount in the gift is unwrapped.
         bool isUnwrapped;
+        /// Whether the associated NFT is burnt.
+        bool isBurnt;
         /// Whether this gift card actually exists.
         bool isInitialized;
     }
@@ -83,6 +85,7 @@ contract GiftNFTCard is
             message: message,
             signedBy: signedBy,
             isUnwrapped: false,
+            isBurnt: false,
             isInitialized: true,
             mintedBy: msg.sender
         });
@@ -134,6 +137,19 @@ contract GiftNFTCard is
 
         // The gift is unwrapped now. Do not allow the same gift to redeem the amount again.
         _giftMap[tokenId].isUnwrapped = true;
+    }
+
+    /// Burns the gift card for good.
+    function burnGiftCard(uint256 tokenId) public {
+        require(
+            ERC721Upgradeable.ownerOf(tokenId) == msg.sender,
+            "GiftNFTCard: caller is not owner"
+        );
+        GiftCard memory gift = _getGiftCard(tokenId);
+        require(gift.isUnwrapped == true, "GiftNFTCard: cannot burn a gift that is not unwrapped");
+
+        ERC721BurnableUpgradeable.burn(tokenId);
+        _giftMap[tokenId].isBurnt = true;
     }
 
     // The following functions are overrides required by Solidity.
