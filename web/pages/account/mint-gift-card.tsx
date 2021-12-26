@@ -4,16 +4,15 @@ import {
   colors,
   Grid,
   IconButton,
-  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { MdArrowBack, MdArrowForward, MdClose } from "react-icons/md";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
 import { useCallback, useRef } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +21,7 @@ import { useSnackbar } from "notistack";
 import html2canvas from "html2canvas";
 import SentGifts from "components/SentGifts";
 import { useAccount } from "store/account";
+import RecipientTextField from "components/RecipientTextField";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -38,14 +38,7 @@ type SchemaType = z.infer<typeof schema>;
 export default function MintGiftCard() {
   const giftCardRef = useRef();
 
-  const {
-    register,
-    control,
-    formState: { errors },
-    setValue,
-    handleSubmit,
-    reset,
-  } = useForm({
+  const form = useForm({
     defaultValues: {
       message: "",
       name: "",
@@ -54,17 +47,12 @@ export default function MintGiftCard() {
     },
     resolver: zodResolver(schema),
   });
-
-  const recipient = useWatch({ control, name: "recipient" });
-
-  const onUseMyWallet = useCallback(() => {
-    const accountId = useAccount.getState().accountId!;
-    setValue("recipient", accountId);
-  }, [setValue]);
-
-  const onClearRecipient = useCallback(() => {
-    setValue("recipient", "");
-  }, [setValue]);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = form;
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -129,65 +117,43 @@ export default function MintGiftCard() {
 
         <Grid item md={6}>
           <Stack alignItems="flex-start">
-            <Stack
-              component="form"
-              spacing={2}
-              sx={{ width: 400 }}
-              onSubmit={handleSubmit(onMintGiftCard)}
-            >
-              <TextField
-                {...materialRegister(register, "recipient")}
-                label="Recipient Wallet"
-                fullWidth
-                helperText={
-                  errors.recipient?.message ??
-                  "This is the wallet of the person who you want to send this gift card to."
-                }
-                error={!!errors.recipient}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      {recipient ? (
-                        <IconButton size="small" onClick={onClearRecipient}>
-                          <MdClose />
-                        </IconButton>
-                      ) : (
-                        <Button size="small" onClick={onUseMyWallet}>
-                          Use My Wallet
-                        </Button>
-                      )}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                type="number"
-                {...materialRegister(register, "amount")}
-                label="Amount"
-                fullWidth
-                helperText={errors.amount?.message}
-                error={!!errors.amount}
-              />
-              <TextField
-                {...materialRegister(register, "message")}
-                label="Message"
-                multiline
-                minRows={2}
-                fullWidth
-                helperText={errors.message?.message}
-                error={!!errors.message}
-              />
-              <TextField
-                {...materialRegister(register, "name")}
-                label="Your name"
-                fullWidth
-                helperText={errors.name?.message}
-                error={!!errors.name}
-              />
-              <Button variant="contained" type="submit">
-                Mint your Gift
-              </Button>
-            </Stack>
+            <FormProvider {...form}>
+              <Stack
+                component="form"
+                spacing={2}
+                sx={{ width: 400 }}
+                onSubmit={handleSubmit(onMintGiftCard)}
+              >
+                <RecipientTextField />
+                <TextField
+                  type="number"
+                  {...materialRegister(register, "amount")}
+                  label="Amount"
+                  fullWidth
+                  helperText={errors.amount?.message}
+                  error={!!errors.amount}
+                />
+                <TextField
+                  {...materialRegister(register, "message")}
+                  label="Message"
+                  multiline
+                  minRows={2}
+                  fullWidth
+                  helperText={errors.message?.message}
+                  error={!!errors.message}
+                />
+                <TextField
+                  {...materialRegister(register, "name")}
+                  label="Your name"
+                  fullWidth
+                  helperText={errors.name?.message}
+                  error={!!errors.name}
+                />
+                <Button variant="contained" type="submit">
+                  Mint your Gift
+                </Button>
+              </Stack>
+            </FormProvider>
           </Stack>
         </Grid>
       </Grid>
