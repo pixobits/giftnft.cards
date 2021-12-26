@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   colors,
   Grid,
   IconButton,
@@ -8,10 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
@@ -23,6 +23,7 @@ import SentGifts from "components/SentGifts";
 import RecipientTextField from "components/RecipientTextField";
 import GiftAmountField from "components/GiftAmountField";
 import { ethers } from "ethers";
+import { useAsyncFn } from "react-use";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -60,7 +61,7 @@ export default function MintGiftCard() {
   const { enqueueSnackbar } = useSnackbar();
 
   const mintGiftCard = useMintGiftCard();
-  const onMintGiftCard = useCallback(
+  const [{ loading }, onMintGiftCard] = useAsyncFn(
     async (state: SchemaType) => {
       const canvas = await html2canvas(giftCardRef.current!, {
         width: 400,
@@ -148,9 +149,13 @@ export default function MintGiftCard() {
                   helperText={errors.name?.message}
                   error={!!errors.name}
                 />
-                <Button variant="contained" type="submit">
+                <LoadingButton
+                  variant="contained"
+                  type="submit"
+                  loading={loading}
+                >
                   Mint your Gift
-                </Button>
+                </LoadingButton>
               </Stack>
             </FormProvider>
           </Stack>
