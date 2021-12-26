@@ -12,7 +12,7 @@ import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
 import { useCallback, useRef } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,8 +20,8 @@ import { useMintGiftCard } from "store/gifts";
 import { useSnackbar } from "notistack";
 import html2canvas from "html2canvas";
 import SentGifts from "components/SentGifts";
-import { useAccount } from "store/account";
 import RecipientTextField from "components/RecipientTextField";
+import GiftAmountField from "components/GiftAmountField";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -43,6 +43,7 @@ export default function MintGiftCard() {
       message: "",
       name: "",
       amount: "1",
+      amountTenPowerMultiplier: 18,
       recipient: "",
     },
     resolver: zodResolver(schema),
@@ -125,14 +126,7 @@ export default function MintGiftCard() {
                 onSubmit={handleSubmit(onMintGiftCard)}
               >
                 <RecipientTextField />
-                <TextField
-                  type="number"
-                  {...materialRegister(register, "amount")}
-                  label="Amount"
-                  fullWidth
-                  helperText={errors.amount?.message}
-                  error={!!errors.amount}
-                />
+                <GiftAmountField />
                 <TextField
                   {...materialRegister(register, "message")}
                   label="Message"
