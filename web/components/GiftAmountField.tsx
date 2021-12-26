@@ -32,8 +32,8 @@ export default function GiftAmountField() {
           <InputAdornment position="end">
             <ButtonGroup size="small" variant="contained">
               <Button
-                color={power === 1 ? "primary" : "inherit"}
-                onClick={onUnitChange(1)}
+                color={power === 18 ? "primary" : "inherit"}
+                onClick={onUnitChange(18)}
               >
                 Metis
               </Button>
@@ -44,8 +44,8 @@ export default function GiftAmountField() {
                 Gwei
               </Button>
               <Button
-                color={power === 18 ? "primary" : "inherit"}
-                onClick={onUnitChange(18)}
+                color={power === 1 ? "primary" : "inherit"}
+                onClick={onUnitChange(1)}
               >
                 Wei
               </Button>

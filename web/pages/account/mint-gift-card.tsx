@@ -22,6 +22,7 @@ import html2canvas from "html2canvas";
 import SentGifts from "components/SentGifts";
 import RecipientTextField from "components/RecipientTextField";
 import GiftAmountField from "components/GiftAmountField";
+import { ethers } from "ethers";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -30,6 +31,7 @@ const schema = z.object({
     .string()
     .regex(/^[0-9]+$/, "Not a valid amount")
     .refine((v) => parseInt(v, 10) > 0, "A gift card needs to have some coins"),
+  amountTenPowerMultiplier: z.number(),
   recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address"),
 });
 
@@ -43,7 +45,7 @@ export default function MintGiftCard() {
       message: "",
       name: "",
       amount: "1",
-      amountTenPowerMultiplier: 18,
+      amountTenPowerMultiplier: 1,
       recipient: "",
     },
     resolver: zodResolver(schema),
@@ -69,7 +71,10 @@ export default function MintGiftCard() {
       await mintGiftCard({
         signedBy: state.name,
         message: state.message,
-        amount: state.amount,
+        // Convert the amount to Wei.
+        amount: ethers.BigNumber.from(state.amount)
+          .mul(ethers.BigNumber.from(10).pow(state.amountTenPowerMultiplier))
+          .toString(),
         recipient: state.recipient,
         imageDataUrl,
       });
