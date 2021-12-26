@@ -28,6 +28,8 @@ contract GiftNFTCard is
         string message;
         /// The one who sent this gift card.
         string signedBy;
+        /// The original address who minted this token.
+        address mintedBy;
         /// Whether the amount in the gift is unwrapped.
         bool isUnwrapped;
         /// Whether this gift card actually exists.
@@ -78,7 +80,8 @@ contract GiftNFTCard is
             message: message,
             signedBy: signedBy,
             isUnwrapped: false,
-            isInitialized: true
+            isInitialized: true,
+            mintedBy: msg.sender
         });
         _sentGifts[msg.sender].push(tokenId);
     }
