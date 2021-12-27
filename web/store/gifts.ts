@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useAccount } from "store/account";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { getContract } from "utils/metamask";
 import { ethers } from "ethers";
 
@@ -17,16 +17,17 @@ type GiftCard = {
  * Fetch all the gift cards owned by the current selected account.
  */
 export function useMyGifts() {
-  return useQuery<GiftCard[]>(
+  const accountId = useAccount(useCallback((state) => state.accountId, []));
+
+  const { refetch, ...rest } = useQuery<GiftCard[]>(
     "use-my-gifts",
     useCallback<() => Promise<GiftCard[]>>(async () => {
-      const contract = await getContract();
-      if (!contract) {
+      if (!accountId) {
         return [];
       }
 
-      const accountId = useAccount.getState().accountId;
-      if (!accountId) {
+      const contract = await getContract();
+      if (!contract) {
         return [];
       }
 
@@ -53,8 +54,17 @@ export function useMyGifts() {
             };
           })
       );
-    }, [])
+    }, [accountId])
   );
+
+  useEffect(() => {
+    // Refetch when account id changes.
+    if (accountId) {
+      refetch();
+    }
+  }, [refetch, accountId]);
+
+  return { refetch, ...rest };
 }
 
 /**
