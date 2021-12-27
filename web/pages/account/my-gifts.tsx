@@ -28,13 +28,15 @@ export default function MyGifts() {
                   sx={{ width: 300, height: 400 }}
                 />
 
-                <Button
-                  variant="contained"
-                  color="inherit"
-                  sx={{ position: "absolute", right: 8, top: 8 }}
-                >
-                  Unwrap Gift
-                </Button>
+                {!it.isUnwrapped && (
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    sx={{ position: "absolute", right: 8, top: 8 }}
+                  >
+                    Unwrap Gift
+                  </Button>
+                )}
               </Box>
             </Grid>
           ))}

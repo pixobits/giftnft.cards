@@ -10,7 +10,10 @@ type GiftCard = {
   imageDataUrl: string;
   message: string;
   signedBy: string;
+  mintedBy: string;
+  isBurnt: boolean;
   isUnwrapped: boolean;
+  isInitialized: boolean;
 };
 
 /**
@@ -36,22 +39,8 @@ export function useMyGifts() {
         Array(giftsCount.toNumber())
           .fill(0)
           .map(async (_, index) => {
-            const [
-              tokenId,
-              amount,
-              imageDataUrl,
-              message,
-              signedBy,
-              isUnwrapped,
-            ] = await contract.getGiftCardByIndex(index);
-            return {
-              tokenId,
-              amount,
-              imageDataUrl,
-              message,
-              signedBy,
-              isUnwrapped,
-            };
+            const tuple = await contract.getGiftCardByIndex(index);
+            return convertGiftCardTupleToObject(tuple);
           })
       );
 
@@ -98,22 +87,8 @@ export function useSentGifts() {
         Array(giftsCount.toNumber())
           .fill(0)
           .map(async (_, index) => {
-            const [
-              tokenId,
-              amount,
-              imageDataUrl,
-              message,
-              signedBy,
-              isUnwrapped,
-            ] = await contract.getSentGiftCardByIndex(index);
-            return {
-              tokenId,
-              amount,
-              imageDataUrl,
-              message,
-              signedBy,
-              isUnwrapped,
-            };
+            const tuple = await contract.getSentGiftCardByIndex(index);
+            return convertGiftCardTupleToObject(tuple);
           })
       );
     }, []),
@@ -159,4 +134,33 @@ export function useMintGiftCard() {
     },
     [client]
   );
+}
+
+/**
+ * Convert the GiftCard tuple from the smart contract into a js object.
+ */
+function convertGiftCardTupleToObject(tuple: any[]): GiftCard {
+  const [
+    tokenId,
+    amount,
+    imageDataUrl,
+    message,
+    signedBy,
+    mintedBy,
+    isUnwrapped,
+    isBurnt,
+    isInitialized,
+  ] = tuple;
+
+  return {
+    tokenId,
+    amount,
+    imageDataUrl,
+    message,
+    signedBy,
+    mintedBy,
+    isUnwrapped,
+    isBurnt,
+    isInitialized,
+  };
 }
