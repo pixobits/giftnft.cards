@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 import Navigation from "components/Navigation";
 import { useMyGifts } from "store/gifts";
@@ -18,14 +18,24 @@ export default function MyGifts() {
         <Grid container spacing={4}>
           {(gifts ?? []).map((it) => (
             <Grid item key={it.tokenId._hex}>
-              <Paper sx={{ width: 400, height: 550, mb: 2 }}>
+              <Box
+                sx={{ width: 300, height: 400, mb: 2, position: "relative" }}
+              >
                 <Box
                   component="img"
                   src={it.imageDataUrl}
                   alt={it.signedBy}
-                  sx={{ width: 400, height: 550 }}
+                  sx={{ width: 300, height: 400 }}
                 />
-              </Paper>
+
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  sx={{ position: "absolute", right: 8, top: 8 }}
+                >
+                  Unwrap Gift
+                </Button>
+              </Box>
             </Grid>
           ))}
         </Grid>
