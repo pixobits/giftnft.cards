@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import { getContract } from "utils/metamask";
 import { ethers } from "ethers";
 
-type GiftCard = {
+export type GiftCard = {
   tokenId: ethers.BigNumber;
   amount: ethers.BigNumber;
   imageDataUrl: string;
@@ -143,19 +143,22 @@ export function useMintGiftCard() {
 export function useUnwrapGift() {
   const client = useQueryClient();
 
-  return useCallback(async (tokenId: string) => {
-    const contract = await getContract();
-    if (!contract) {
-      return;
-    }
-    await contract.unwrapGiftCard(tokenId);
+  return useCallback(
+    async (tokenId: string) => {
+      const contract = await getContract();
+      if (!contract) {
+        return;
+      }
+      await contract.unwrapGiftCard(tokenId);
 
-    // Refetch the gifts.
-    await Promise.all([
-      client.invalidateQueries("use-my-gifts"),
-      client.invalidateQueries("use-sent-gifts"),
-    ]);
-  }, []);
+      // Refetch the gifts.
+      await Promise.all([
+        client.invalidateQueries("use-my-gifts"),
+        client.invalidateQueries("use-sent-gifts"),
+      ]);
+    },
+    [client]
+  );
 }
 
 /**
