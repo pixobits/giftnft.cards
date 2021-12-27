@@ -32,7 +32,7 @@ export function useMyGifts() {
       }
 
       const giftsCount = await contract.balanceOf(accountId);
-      return await Promise.all(
+      const cards: GiftCard[] = await Promise.all(
         Array(giftsCount.toNumber())
           .fill(0)
           .map(async (_, index) => {
@@ -54,6 +54,18 @@ export function useMyGifts() {
             };
           })
       );
+
+      // Put all the unwrapped cards at the last.
+      return cards.sort((left, right) => {
+        if (left.isUnwrapped !== right.isUnwrapped) {
+          if (left.isUnwrapped) {
+            return -1;
+          }
+          return 1;
+        }
+
+        return 0;
+      });
     }, [accountId]),
     // Refetch every 5 seconds.
     { refetchInterval: 5_000 }
