@@ -12,12 +12,12 @@ export default function SentGifts() {
       <Grid container spacing={4}>
         {(gifts ?? []).map((it) => (
           <Grid item key={it.tokenId._hex}>
-            <Paper sx={{ width: 400 / 2, height: 550 / 2, mb: 2 }}>
+            <Paper sx={{ width: 300 / 1.5, height: 400 / 1.5, mb: 2 }}>
               <Box
                 component="img"
                 src={it.imageDataUrl}
                 alt={it.signedBy}
-                sx={{ width: 400 / 2, height: 550 / 2 }}
+                sx={{ width: 300 / 1.5, height: 400 / 1.5 }}
               />
             </Paper>
           </Grid>

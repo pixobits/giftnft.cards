@@ -109,8 +109,8 @@ export default function MintGiftCard() {
             <Box
               ref={giftCardRef}
               sx={{
-                width: 400,
-                height: 550,
+                width: 300,
+                height: 400,
                 boxShadow: 6,
                 borderRadius: 2,
                 background: `linear-gradient(60deg, ${colors.red["600"]} 0%, ${colors.pink["400"]} 20%, ${colors.purple["600"]} 100%)`,
