@@ -48,9 +48,9 @@ export function useMyGifts() {
       return cards.sort((left, right) => {
         if (left.isUnwrapped !== right.isUnwrapped) {
           if (left.isUnwrapped) {
-            return -1;
+            return 1;
           }
-          return 1;
+          return -1;
         }
 
         return 0;
