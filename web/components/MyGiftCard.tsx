@@ -33,6 +33,17 @@ export default function MyGiftCard({ giftCard }: MyGiftCardProps) {
             Unwrap Gift
           </Button>
         )}
+
+        {giftCard.isUnwrapped && (
+          <Button
+            variant="contained"
+            color="inherit"
+            sx={{ position: "absolute", right: 8, top: 8 }}
+            disabled
+          >
+            Unwrapped
+          </Button>
+        )}
       </Box>
 
       <UnwrapConfirmation giftCard={giftCard} open={open} onClose={onClose} />
