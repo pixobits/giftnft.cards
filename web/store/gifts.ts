@@ -54,7 +54,9 @@ export function useMyGifts() {
             };
           })
       );
-    }, [accountId])
+    }, [accountId]),
+    // Refetch every 5 seconds.
+    { refetchInterval: 5_000 }
   );
 
   useEffect(() => {
@@ -102,7 +104,9 @@ export function useSentGifts() {
             };
           })
       );
-    }, [])
+    }, []),
+    // Refetch every 5 seconds.
+    { refetchInterval: 5_000 }
   );
 }
 
