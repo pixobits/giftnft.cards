@@ -1,17 +1,9 @@
-import {
-  Box,
-  colors,
-  Grid,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { NextSeo } from "next-seo";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
@@ -24,6 +16,9 @@ import RecipientTextField from "components/RecipientTextField";
 import GiftAmountField from "components/GiftAmountField";
 import { ethers } from "ethers";
 import { useAsyncFn } from "react-use";
+import BirthdayCard from "components/cards/BirthdayCard";
+
+const cards = [BirthdayCard];
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -40,6 +35,16 @@ type SchemaType = z.infer<typeof schema>;
 
 export default function MintGiftCard() {
   const giftCardRef = useRef();
+  const [cardIndex, setCardIndex] = useState(0);
+  const onNextCard = useCallback(
+    () => setCardIndex((index) => (index + 1) % cards.length),
+    []
+  );
+  const onPreviousCard = useCallback(
+    () => setCardIndex((index) => (index === 0 ? cards.length : index - 1)),
+    []
+  );
+  const NewGiftCard = cards[cardIndex];
 
   const form = useForm({
     defaultValues: {
@@ -95,36 +100,27 @@ export default function MintGiftCard() {
         Mint a Gift Card
       </Typography>
 
-      <Grid container spacing={8} sx={{ mt: 2 }}>
-        <Grid item md={6}>
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-            spacing={2}
-          >
-            <IconButton>
-              <MdArrowBack />
-            </IconButton>
-            <Box
-              ref={giftCardRef}
-              sx={{
-                width: 300,
-                height: 400,
-                boxShadow: 6,
-                borderRadius: 2,
-                background: `linear-gradient(60deg, ${colors.red["600"]} 0%, ${colors.pink["400"]} 20%, ${colors.purple["600"]} 100%)`,
-              }}
-            />
-            <IconButton>
-              <MdArrowForward />
-            </IconButton>
-          </Stack>
-        </Grid>
+      <FormProvider {...form}>
+        <Grid container spacing={8} sx={{ mt: 2 }}>
+          <Grid item md={6}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="center"
+              spacing={2}
+            >
+              <IconButton onClick={onPreviousCard}>
+                <MdArrowBack />
+              </IconButton>
+              <NewGiftCard ref={giftCardRef} />
+              <IconButton onClick={onNextCard}>
+                <MdArrowForward />
+              </IconButton>
+            </Stack>
+          </Grid>
 
-        <Grid item md={6}>
-          <Stack alignItems="flex-start">
-            <FormProvider {...form}>
+          <Grid item md={6}>
+            <Stack alignItems="flex-start">
               <Stack
                 component="form"
                 spacing={2}
@@ -157,10 +153,10 @@ export default function MintGiftCard() {
                   Mint your Gift
                 </LoadingButton>
               </Stack>
-            </FormProvider>
-          </Stack>
+            </Stack>
+          </Grid>
         </Grid>
-      </Grid>
+      </FormProvider>
 
       <SentGifts />
     </>
