@@ -64,8 +64,8 @@ export default function MintGiftCard() {
   const [{ loading }, onMintGiftCard] = useAsyncFn(
     async (state: SchemaType) => {
       const canvas = await html2canvas(giftCardRef.current!, {
-        width: 400,
-        height: 550,
+        width: 300,
+        height: 400,
       });
       const imageDataUrl = canvas.toDataURL("image/webp");
 
