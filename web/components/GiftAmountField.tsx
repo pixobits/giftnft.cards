@@ -3,6 +3,9 @@ import { Button, ButtonGroup, InputAdornment, TextField } from "@mui/material";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useCallback } from "react";
 
+/**
+ * Input field to get the amount to be embedded within the Gift Card.
+ */
 export default function GiftAmountField() {
   const {
     register,

@@ -5,6 +5,9 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { useCallback } from "react";
 import { useAccount } from "store/account";
 
+/**
+ * Text field to get the address of the recipient who is to receive the NFT gift card.
+ */
 export default function RecipientTextField() {
   const {
     register,

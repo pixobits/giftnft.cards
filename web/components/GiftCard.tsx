@@ -2,9 +2,11 @@ import { Box, Stack, Typography } from "@mui/material";
 import { forwardRef, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useAccount } from "store/account";
-import { ethers } from "ethers";
 import { formatAmount } from "utils/metis";
 
+/**
+ * The generated Gift Card which is then converted to an image when minting the NFT.
+ */
 export default forwardRef(function GiftCard(_, ref) {
   const { control } = useFormContext();
   const message = useWatch({ control, name: "message" });
