@@ -27,7 +27,7 @@ export default function MyGiftCard({ giftCard }: MyGiftCardProps) {
           <Button
             variant="contained"
             color="inherit"
-            sx={{ position: "absolute", right: 8, top: 8 }}
+            sx={{ position: "absolute", left: 8, top: 8 }}
             onClick={onOpen}
           >
             Unwrap Gift
@@ -38,7 +38,7 @@ export default function MyGiftCard({ giftCard }: MyGiftCardProps) {
           <Button
             variant="contained"
             color="inherit"
-            sx={{ position: "absolute", right: 8, top: 8 }}
+            sx={{ position: "absolute", left: 8, top: 8 }}
             disabled
           >
             Unwrapped
