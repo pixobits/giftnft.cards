@@ -83,7 +83,7 @@ export function useSentGifts() {
       }
 
       const giftsCount = await contract.lengthOfSentGiftCards();
-      return await Promise.all(
+      const gifts = await Promise.all(
         Array(giftsCount.toNumber())
           .fill(0)
           .map(async (_, index) => {
@@ -91,6 +91,9 @@ export function useSentGifts() {
             return convertGiftCardTupleToObject(tuple);
           })
       );
+
+      // Show the latest ones first.
+      return gifts.reverse();
     }, []),
     // Refetch every 5 seconds.
     { refetchInterval: 5_000 }
