@@ -1,9 +1,8 @@
-import { Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { Grid, Stack, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { NextSeo } from "next-seo";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import Navigation from "components/Navigation";
-import { useCallback, useRef, useState } from "react";
+import { useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { materialRegister } from "utils/materialForm";
 import { z } from "zod";
@@ -16,9 +15,7 @@ import RecipientTextField from "components/RecipientTextField";
 import GiftAmountField from "components/GiftAmountField";
 import { ethers } from "ethers";
 import { useAsyncFn } from "react-use";
-import BirthdayCard from "components/cards/BirthdayCard";
-
-const cards = [BirthdayCard];
+import GiftCard from "components/GiftCard";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -35,23 +32,13 @@ type SchemaType = z.infer<typeof schema>;
 
 export default function MintGiftCard() {
   const giftCardRef = useRef();
-  const [cardIndex, setCardIndex] = useState(0);
-  const onNextCard = useCallback(
-    () => setCardIndex((index) => (index + 1) % cards.length),
-    []
-  );
-  const onPreviousCard = useCallback(
-    () => setCardIndex((index) => (index === 0 ? cards.length : index - 1)),
-    []
-  );
-  const NewGiftCard = cards[cardIndex];
 
   const form = useForm({
     defaultValues: {
       message: "",
       name: "",
       amount: "1",
-      amountTenPowerMultiplier: 1,
+      amountTenPowerMultiplier: 0,
       recipient: "",
     },
     resolver: zodResolver(schema),
@@ -103,19 +90,8 @@ export default function MintGiftCard() {
       <FormProvider {...form}>
         <Grid container spacing={8} sx={{ mt: 2 }}>
           <Grid item md={6}>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-              spacing={2}
-            >
-              <IconButton onClick={onPreviousCard}>
-                <MdArrowBack />
-              </IconButton>
-              <NewGiftCard ref={giftCardRef} />
-              <IconButton onClick={onNextCard}>
-                <MdArrowForward />
-              </IconButton>
+            <Stack alignItems="flex-end">
+              <GiftCard ref={giftCardRef} />
             </Stack>
           </Grid>
 

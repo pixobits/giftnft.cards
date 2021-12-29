@@ -44,8 +44,8 @@ export default function GiftAmountField() {
                 Gwei
               </Button>
               <Button
-                color={power === 1 ? "primary" : "inherit"}
-                onClick={onUnitChange(1)}
+                color={power === 0 ? "primary" : "inherit"}
+                onClick={onUnitChange(0)}
               >
                 Wei
               </Button>
