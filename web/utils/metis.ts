@@ -1,22 +1,31 @@
-import { ethers } from "ethers";
+/**
+ * Calculates the amount in Wei based on the current unit that is selected.
+ * The unit is either Wei or Gwei or Metis.
+ */
+export function calculateWei(amount: string, unit: 0 | 9 | 18): number {
+  const multiplier = 10 ** unit;
+  return Math.floor(Number(amount) * multiplier);
+}
 
+/**
+ * Format the amount to legible unit.
+ */
 export function formatAmount(amount: string, unit: 0 | 9 | 18) {
   if (!amount) {
     return "";
   }
 
-  const inWei = ethers.BigNumber.from(amount).mul(
-    ethers.BigNumber.from(10).pow(unit)
-  );
+  const inWei = calculateWei(amount, unit);
 
-  // If the amount is greater than 0.0001 Metis, show in metis.
-  const inMetis = inWei.div(ethers.BigNumber.from(10).pow(18));
-  if (inMetis.gt(0)) {
+  // If the amount is greater than 0.0001 Metis, show in Metis.
+  const inMetis = inWei / 10 ** 18;
+  if (inMetis > 0.0001) {
     return `$METIS ${inMetis}`;
   }
 
-  const inGwei = inWei.div(ethers.BigNumber.from(10).pow(9));
-  if (inGwei.gt(0)) {
+  // If the amount is greater than 0.0001 Gwei, show in Gwei.
+  const inGwei = inWei / 10 ** 9;
+  if (inGwei > 0.0001) {
     return `$GWEI ${inGwei}`;
   }
 

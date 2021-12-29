@@ -13,9 +13,9 @@ import html2canvas from "html2canvas";
 import SentGifts from "components/SentGifts";
 import RecipientTextField from "components/RecipientTextField";
 import GiftAmountField from "components/GiftAmountField";
-import { ethers } from "ethers";
 import { useAsyncFn } from "react-use";
 import GiftCard from "components/GiftCard";
+import { calculateWei } from "utils/metis";
 
 const schema = z.object({
   message: z.string().min(1, "Required"),
@@ -65,9 +65,10 @@ export default function MintGiftCard() {
         signedBy: state.name,
         message: state.message,
         // Convert the amount to Wei.
-        amount: ethers.BigNumber.from(state.amount)
-          .mul(ethers.BigNumber.from(10).pow(state.amountTenPowerMultiplier))
-          .toString(),
+        amount: calculateWei(
+          state.amount,
+          state.amountTenPowerMultiplier as 0 | 9 | 18
+        ).toString(),
         recipient: state.recipient,
         imageDataUrl,
       });
