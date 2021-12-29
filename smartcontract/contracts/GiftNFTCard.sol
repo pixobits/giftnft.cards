@@ -36,6 +36,8 @@ contract GiftNFTCard is
         bool isUnwrapped;
         /// Whether the associated NFT is burnt.
         bool isBurnt;
+        /// Time at which this gift card was minted.
+        uint256 timestamp;
         /// Whether this gift card actually exists.
         bool isInitialized;
     }
@@ -77,6 +79,7 @@ contract GiftNFTCard is
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
 
+
         // Store the metadata of the NFT in the map.
         _giftMap[tokenId] = GiftCard({
             tokenId: tokenId,
@@ -84,10 +87,11 @@ contract GiftNFTCard is
             imageDataUrl: imageDataUrl,
             message: message,
             signedBy: signedBy,
+            mintedBy: msg.sender,
             isUnwrapped: false,
             isBurnt: false,
-            isInitialized: true,
-            mintedBy: msg.sender
+            timestamp: block.timestamp,
+            isInitialized: true
         });
         _sentGifts[msg.sender].push(tokenId);
     }
