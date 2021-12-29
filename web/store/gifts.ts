@@ -13,6 +13,7 @@ export type GiftCard = {
   mintedBy: string;
   isBurnt: boolean;
   isUnwrapped: boolean;
+  timestamp: number;
   isInitialized: boolean;
 };
 
@@ -177,6 +178,7 @@ function convertGiftCardTupleToObject(tuple: any[]): GiftCard {
     mintedBy,
     isUnwrapped,
     isBurnt,
+    timestamp,
     isInitialized,
   ] = tuple;
 
@@ -189,6 +191,7 @@ function convertGiftCardTupleToObject(tuple: any[]): GiftCard {
     mintedBy,
     isUnwrapped,
     isBurnt,
+    timestamp,
     isInitialized,
   };
 }
