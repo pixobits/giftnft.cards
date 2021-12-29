@@ -17,16 +17,25 @@ import { useAsyncFn } from "react-use";
 import GiftCard from "components/GiftCard";
 import { calculateWei } from "utils/metis";
 
-const schema = z.object({
-  message: z.string().min(1, "Required"),
-  name: z.string().min(1, "Required"),
-  amount: z
-    .string()
-    .regex(/^[0-9]+$/, "Not a valid amount")
-    .refine((v) => parseInt(v, 10) > 0, "A gift card needs to have some coins"),
-  amountTenPowerMultiplier: z.number(),
-  recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address"),
-});
+const schema = z
+  .object({
+    message: z.string().min(1, "Required"),
+    name: z.string().min(1, "Required"),
+    amount: z.string().regex(/^([0-9]*[.])?[0-9]{0,9}$/, "Not a valid amount"),
+    amountTenPowerMultiplier: z.number(),
+    recipient: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address"),
+  })
+  .refine(
+    (data) =>
+      calculateWei(data.amount, data.amountTenPowerMultiplier as 0 | 9 | 18) >
+      0,
+    {
+      message: "A gift card needs to have some coins",
+      path: ["amount"],
+    }
+  );
 
 type SchemaType = z.infer<typeof schema>;
 

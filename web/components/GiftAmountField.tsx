@@ -21,7 +21,6 @@ export default function GiftAmountField() {
 
   return (
     <TextField
-      type="number"
       {...materialRegister(register, "amount")}
       label="Amount"
       fullWidth
