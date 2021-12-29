@@ -1,15 +1,13 @@
-import { Container, Grid, Typography } from "@mui/material";
-import { NextSeo } from "next-seo";
 import Navigation from "components/Navigation";
-import { useMyGifts } from "store/gifts";
+import { Container, Grid, Typography } from "@mui/material";
 import MyGiftCard from "components/MyGiftCard";
+import { useMyGifts } from "store/gifts";
 
 export default function MyGifts() {
   const { data: gifts } = useMyGifts();
 
   return (
     <>
-      <NextSeo title="My Gifts" />
       <Navigation />
       <Typography variant="h5" textAlign="center" sx={{ mt: 4 }}>
         My Gifts

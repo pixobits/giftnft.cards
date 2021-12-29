@@ -7,7 +7,6 @@ import { useAsync } from "react-use";
 import { getMetamask } from "utils/metamask";
 
 export default function ConnectWallet() {
-  const accountId = useAccount(useCallback((state) => state.accountId, []));
   const { value: metamask } = useAsync(useCallback(() => getMetamask(), []));
 
   const onRequest = useCallback(async () => {
@@ -28,33 +27,12 @@ export default function ConnectWallet() {
     );
   }
 
-  if (!accountId) {
-    return (
-      <Button
-        onClick={onRequest}
-        variant="contained"
-        size="large"
-        sx={{ mt: 2 }}
-      >
-        <Box sx={{ width: 28, height: 28, mr: 2 }}>
-          <MetamaskIcon />
-        </Box>
-        Connect your Wallet
-      </Button>
-    );
-  }
-
   return (
-    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-      <Button size="large">
-        {accountId.substring(0, 8)}...
-        {accountId.substring(accountId.length - 6)}
-      </Button>
-      <Link href="/account/mint-gift-card" passHref>
-        <Button component="a" variant="contained" size="large">
-          View Account
-        </Button>
-      </Link>
-    </Stack>
+    <Button onClick={onRequest} variant="contained" size="large" sx={{ mt: 2 }}>
+      <Box sx={{ width: 28, height: 28, mr: 2 }}>
+        <MetamaskIcon />
+      </Box>
+      Connect your Wallet
+    </Button>
   );
 }

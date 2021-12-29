@@ -1,23 +1,9 @@
-import { Avatar, Stack, Typography } from "@mui/material";
-import ConnectWallet from "components/ConnectWallet";
+import { useAccount } from "store/account";
+import { useCallback } from "react";
+import ConnectView from "components/ConnectView";
+import AccountView from "components/AccountView";
 
 export default function Home() {
-  return (
-    <Stack justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
-      <Avatar
-        sx={{
-          width: 180,
-          height: 180,
-          fontSize: 96,
-          bgcolor: "grey.100",
-        }}
-      >
-        🎉
-      </Avatar>
-      <Typography variant="h4" fontWeight={200} sx={{ mt: 3 }}>
-        Send your friends NFT Gift Cards
-      </Typography>
-      <ConnectWallet />
-    </Stack>
-  );
+  const accountId = useAccount(useCallback((state) => state.accountId, []));
+  return accountId ? <AccountView /> : <ConnectView />;
 }
