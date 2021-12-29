@@ -1,12 +1,13 @@
-import { AppBar, Box, Button, ButtonGroup, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useAccount } from "store/account";
-import { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import MetamaskIcon from "components/MetamaskIcon";
-import { useRouter } from "next/router";
-import Link from "next/link";
 
-export default function Navigation() {
-  const { pathname } = useRouter();
+type NavigationProps = {
+  children: ReactNode;
+};
+
+export default function Navigation({ children }: NavigationProps) {
   const accountId = useAccount(useCallback((state) => state.accountId, []));
 
   return (
@@ -20,30 +21,7 @@ export default function Navigation() {
       }}
     >
       <Toolbar sx={{ justifyContent: "center" }}>
-        <ButtonGroup>
-          <Link href="/account/mint-gift-card" passHref>
-            <Button
-              component="a"
-              variant={
-                pathname === "/account/mint-gift-card"
-                  ? "contained"
-                  : "outlined"
-              }
-            >
-              Mint a Gift Card
-            </Button>
-          </Link>
-          <Link href="/account/my-gifts" passHref>
-            <Button
-              component="a"
-              variant={
-                pathname === "/account/my-gifts" ? "contained" : "outlined"
-              }
-            >
-              My Gift Cards
-            </Button>
-          </Link>
-        </ButtonGroup>
+        {children}
 
         {accountId && (
           <Button sx={{ position: "absolute", right: 24 }}>

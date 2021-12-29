@@ -1,4 +1,3 @@
-import Navigation from "components/Navigation";
 import { Container, Grid, Typography } from "@mui/material";
 import MyGiftCard from "components/MyGiftCard";
 import { useMyGifts } from "store/gifts";
@@ -8,7 +7,6 @@ export default function MyGifts() {
 
   return (
     <>
-      <Navigation />
       <Typography variant="h5" textAlign="center" sx={{ mt: 4 }}>
         My Gifts
       </Typography>

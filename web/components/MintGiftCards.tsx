@@ -91,8 +91,6 @@ export default function MintGiftCard() {
 
   return (
     <>
-      <NextSeo title="Mint a Gift Card" />
-      <Navigation />
       <Typography variant="h5" textAlign="center" sx={{ mt: 4 }}>
         Mint a Gift Card
       </Typography>
