@@ -44,8 +44,8 @@ export function useMyGifts() {
           })
       );
 
-      // Put all the unwrapped cards at the last.
-      return cards.sort((left, right) => {
+      // Put all the unwrapped cards at the last and order the latest ones first.
+      return cards.reverse().sort((left, right) => {
         if (left.isUnwrapped !== right.isUnwrapped) {
           if (left.isUnwrapped) {
             return 1;
