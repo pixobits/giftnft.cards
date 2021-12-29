@@ -18,6 +18,7 @@ export default function SentGifts() {
       <Typography variant="h5" sx={{ mb: 2 }}>
         Gifts you sent
       </Typography>
+
       {isLoading && (
         <Stack alignItems="center">
           <CircularProgress />
@@ -42,7 +43,7 @@ export default function SentGifts() {
       )}
 
       {!isLoading && (gifts ?? []).length === 0 && (
-        <Alert severity="info">You have not sent any gifts yet.</Alert>
+        <Alert severity="info">You have not sent any gifts.</Alert>
       )}
     </Container>
   );
