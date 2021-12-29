@@ -38,7 +38,15 @@ export default function MyGiftCard({ giftCard }: MyGiftCardProps) {
           <Button
             variant="contained"
             color="inherit"
-            sx={{ position: "absolute", left: 8, top: 8 }}
+            sx={{
+              position: "absolute",
+              left: 8,
+              top: 8,
+              "&.MuiButton-root.Mui-disabled": {
+                color: "grey.500",
+                bgcolor: "grey.300",
+              },
+            }}
             disabled
           >
             Unwrapped
