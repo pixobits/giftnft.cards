@@ -1,3 +1,9 @@
+# How to deploy?
+
+First, setup the environment variables by copying the `.env.example` file to `.env` and providing appropriate values to them.
+
+Then, run the command `yarn deploy-testnet` to deploy it to the Metis Blockchain. After the deployment succeeds, you should receive the address of the deployed smart contract on the console. This is going to be needed for upgrades to the smart contract and by the frontend.
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
